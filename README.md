@@ -1,1 +1,6 @@
-# my_autotests
+
+## Autotests for https://demoqa.com/elements
+
+* Selenium WebDriver
+* Pytest
+* Faker
