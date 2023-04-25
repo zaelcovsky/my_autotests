@@ -252,6 +252,7 @@ class TestElements:
             print(color_after, color_before)
             assert color_after != color_before, "Button did not change color"
 
+
         @allure.title("Check enable button")
         def test_appear_button(self, driver):
             appear_button = DynamicPropertiesPage(driver, "https://demoqa.com/dynamic-properties")
