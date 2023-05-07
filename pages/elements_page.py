@@ -10,7 +10,6 @@ import random
 from selenium.common import TimeoutException
 
 
-
 @allure.suite("TextBox page")
 class TextBoxPage(BasePage):
     locators = TextBoxPageLocators()
@@ -214,11 +213,47 @@ class LinksPage(BasePage):
             simple_link.click()
             self.driver.switch_to.window(self.driver.window_handles[1])
             url = self.driver.current_url
-            return link_href, url
+            print(url)
+            return link_href, url, response.status_code, response.reason
         else:
-            return response.status_code
+            return link_href, link_href, response.status_code, response.reason
 
         ###### def click_on_simple_link_v2
+    @allure.title("Click on simple link v2")
+    def click_on_simple_link_v2(self):
+        simple_link = self.element_is_visible(self.locators.SIMPLE_LINK)
+        link_href = simple_link.get_attribute('href')
+        print(link_href)
+        simple_link.click()
+        self.driver.switch_to.window(self.driver.window_handles[1])
+        url = self.driver.current_url
+        print(url)
+        return link_href, url
+
+    @allure.title("Click on dynamic link")
+    def click_on_dynamic_link(self):
+        simple_link = self.element_is_visible(self.locators.DYNAMIC_LINK)
+        link_href = simple_link.get_attribute('href')
+        # Разные варианты доставания текста из тега
+        text = simple_link.text
+        text1 = self.driver.find_element(By.CSS_SELECTOR, "a[id='dynamicLink']").text
+        text2 = self.driver.find_element(By.CSS_SELECTOR, "a[id='dynamicLink']").get_attribute("textContent")
+        text3 = self.driver.find_element(By.CSS_SELECTOR, "a[id='dynamicLink']").get_attribute("innerHTML")
+        print(link_href)
+        print(text)
+        print(text1)
+        print(text2)
+        print(text3)
+        response = requests.get(link_href)
+        if response.status_code == 200:
+            simple_link.click()
+            self.driver.switch_to.window(self.driver.window_handles[1])
+            url = self.driver.current_url
+            print(url)
+            return text, link_href, url, response.status_code, response.reason
+        else:
+            return text, link_href, link_href, response.status_code, response.reason
+
     @allure.title("click on broken link")
     def click_on_the_broken_link(self, url):
         response = requests.get(url)
@@ -226,6 +261,129 @@ class LinksPage(BasePage):
             self.element_is_present(self.locators.BAD_REQUEST_LINK).click()
         else:
             return response.status_code
+
+    # !!!!!!!!!!!!!!!! тест Дениса на страницу /links
+    @allure.step('check all links')
+    def click_on_the_all_links(self, item):
+        self.element_is_visible(self.locators.ALL_LINKS[item[0]]).click()
+        text = self.element_is_visible(self.locators.TEXT_AFTER_CLICK).text
+        print(text)
+        response = requests.get(item[1])
+        status_reason = response.reason
+        status_code = str(response.status_code)
+        return text, status_reason, status_code
+
+    # !!!!!!!!!!!!!!!! мои тесты на страницу /links
+    @allure.title("click on created link")
+    def click_on_the_created_link(self):
+        self.element_is_visible(self.locators.CREATED_LINK).click()
+        response_code = self.element_is_present(self.locators.RESPONSE_CODE).text
+        response_reason = self.element_is_present(self.locators.RESPONSE_REASON).text
+        response = requests.get("https://demoqa.com/created")
+        return response_code, response_reason, response.status_code, response.reason
+
+    @allure.title("click on no-content link")
+    def click_on_the_no_content_link(self):
+        self.element_is_visible(self.locators.NO_CONTENT_LINK).click()
+        response_code = self.element_is_present(self.locators.RESPONSE_CODE).text
+        response_reason = self.element_is_present(self.locators.RESPONSE_REASON).text
+        response = requests.get("https://demoqa.com/no-content")
+        return response_code, response_reason, response.status_code, response.reason
+
+    @allure.title("click on moved link")
+    def click_on_the_moved_link(self):
+        self.element_is_visible(self.locators.MOVED_LINK).click()
+        response_code = self.element_is_present(self.locators.RESPONSE_CODE).text
+        response_reason = self.element_is_present(self.locators.RESPONSE_REASON).text
+        response = requests.get("https://demoqa.com/moved")
+        return response_code, response_reason, response.status_code, response.reason
+
+    @allure.title("click on bad request link")
+    def click_on_the_bad_request_link(self):
+        self.element_is_visible(self.locators.BAD_REQUEST_LINK).click()
+        response_code = self.element_is_present(self.locators.RESPONSE_CODE).text
+        response_reason = self.element_is_present(self.locators.RESPONSE_REASON).text
+        response = requests.get("https://demoqa.com/bad-request")
+        return response_code, response_reason, response.status_code, response.reason
+
+    @allure.title("click on unauthorized link")
+    def click_on_the_unauthorized_link(self):
+        self.element_is_visible(self.locators.UNAUTHORIZED_LINK).click()
+        response_code = self.element_is_present(self.locators.RESPONSE_CODE).text
+        response_reason = self.element_is_present(self.locators.RESPONSE_REASON).text
+        response = requests.get("https://demoqa.com/unauthorized")
+        return response_code, response_reason, response.status_code, response.reason
+
+    @allure.title("click on forbidden link")
+    def click_on_the_forbidden_link(self):
+        self.element_is_visible(self.locators.FORBIDDEN_LINK).click()
+        response_code = self.element_is_present(self.locators.RESPONSE_CODE).text
+        response_reason = self.element_is_present(self.locators.RESPONSE_REASON).text
+        response = requests.get("https://demoqa.com/forbidden")
+        return response_code, response_reason, response.status_code, response.reason
+
+    @allure.title("click on not found link")
+    def click_on_the_not_found_link(self):
+        self.element_is_visible(self.locators.NOT_FOUND_LINK).click()
+        response_code = self.element_is_present(self.locators.RESPONSE_CODE).text
+        response_reason = self.element_is_present(self.locators.RESPONSE_REASON).text
+        response = requests.get("https://demoqa.com/invalid-url")
+        return response_code, response_reason, response.status_code, response.reason
+
+    # PARAMETRIZE (было 49 строк стало 44 строки)
+    @allure.title("click on different link")
+    def click_on_the_different_link(self, selector):
+        if selector == 'NOT_FOUND_LINK':
+            self.element_is_visible(self.locators.NOT_FOUND_LINK).click()
+            response_code = self.element_is_present(self.locators.RESPONSE_CODE).text
+            response_reason = self.element_is_present(self.locators.RESPONSE_REASON).text
+            response = requests.get("https://demoqa.com/invalid-url")
+            return response_code, response_reason, response.status_code, response.reason
+        if selector == "FORBIDDEN_LINK":
+            self.element_is_visible(self.locators.FORBIDDEN_LINK).click()
+            response_code = self.element_is_present(self.locators.RESPONSE_CODE).text
+            response_reason = self.element_is_present(self.locators.RESPONSE_REASON).text
+            response = requests.get("https://demoqa.com/forbidden")
+            return response_code, response_reason, response.status_code, response.reason
+        if selector == "UNAUTHORIZED_LINK":
+            self.element_is_visible(self.locators.UNAUTHORIZED_LINK).click()
+            response_code = self.element_is_present(self.locators.RESPONSE_CODE).text
+            response_reason = self.element_is_present(self.locators.RESPONSE_REASON).text
+            response = requests.get("https://demoqa.com/unauthorized")
+            return response_code, response_reason, response.status_code, response.reason
+        if selector == "BAD_REQUEST_LINK":
+            self.element_is_visible(self.locators.BAD_REQUEST_LINK).click()
+            response_code = self.element_is_present(self.locators.RESPONSE_CODE).text
+            response_reason = self.element_is_present(self.locators.RESPONSE_REASON).text
+            response = requests.get("https://demoqa.com/bad-request")
+            return response_code, response_reason, response.status_code, response.reason
+        if selector == "MOVED_LINK":
+            self.element_is_visible(self.locators.MOVED_LINK).click()
+            response_code = self.element_is_present(self.locators.RESPONSE_CODE).text
+            response_reason = self.element_is_present(self.locators.RESPONSE_REASON).text
+            response = requests.get("https://demoqa.com/moved")
+            return response_code, response_reason, response.status_code, response.reason
+        if selector == "NO_CONTENT_LINK":
+            self.element_is_visible(self.locators.NO_CONTENT_LINK).click()
+            response_code = self.element_is_present(self.locators.RESPONSE_CODE).text
+            response_reason = self.element_is_present(self.locators.RESPONSE_REASON).text
+            response = requests.get("https://demoqa.com/no-content")
+            return response_code, response_reason, response.status_code, response.reason
+        if selector == "CREATED_LINK":
+            self.element_is_visible(self.locators.CREATED_LINK).click()
+            response_code = self.element_is_present(self.locators.RESPONSE_CODE).text
+            response_reason = self.element_is_present(self.locators.RESPONSE_REASON).text
+            response = requests.get("https://demoqa.com/created")
+            return response_code, response_reason, response.status_code, response.reason
+
+        # мой улучшенный вариант PARAMETRIZE (было 44 строки стало 44 строки)
+    @allure.title("click on different link v2")
+    def click_on_the_different_link_v2(self, item1, item2):
+        self.element_is_visible(self.locators.ALL_LINKS[item1]).click()
+        response_code = self.element_is_present(self.locators.RESPONSE_CODE).text
+        response_reason = self.element_is_present(self.locators.RESPONSE_REASON).text
+        response = requests.get(item2)
+        return response_code, response_reason, response.status_code, response.reason
 
 
 @allure.suite("Download page")

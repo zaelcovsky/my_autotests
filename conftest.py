@@ -19,6 +19,7 @@ def driver():
     driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
     # driver = webdriver.Chrome(executable_path=executable_path, chrome_options=chrome_options)
     driver.maximize_window()
+    # driver.set_window_size(800, 600)
     yield driver
     attach = driver.get_screenshot_as_png()
     allure.attach(attach, name=f'Screenshot {datetime.today}', attachment_type=allure.attachment_type.PNG)

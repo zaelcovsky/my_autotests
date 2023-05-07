@@ -70,22 +70,44 @@ class ButtonsPageLocators:
 
 
 class LinksPageLocators:
+
     SIMPLE_LINK = (By.CSS_SELECTOR, "a[id='simpleLink']")
+    DYNAMIC_LINK = (By.CSS_SELECTOR, "a[id='dynamicLink']")
+    CREATED_LINK = (By.CSS_SELECTOR, "a[id='created']")
+    NO_CONTENT_LINK = (By.CSS_SELECTOR, "a[id='no-content']")
+    MOVED_LINK = (By.CSS_SELECTOR, "a[id='moved']")
     BAD_REQUEST_LINK = (By.CSS_SELECTOR, "a[id='bad-request']")
+    UNAUTHORIZED_LINK = (By.CSS_SELECTOR, "a[id='unauthorized']")
     NOT_FOUND_LINK = (By.CSS_SELECTOR, "a[id='invalid-url']")
     FORBIDDEN_LINK = (By.CSS_SELECTOR, "a[id='forbidden']")
-
+    # мои локаторы
+    RESPONSE_TEXT = (By.CSS_SELECTOR, "p[id='linkResponse']")
+    RESPONSE_CODE = (By.CSS_SELECTOR, "p[id='linkResponse'] > b:nth-child(1)")
+    RESPONSE_REASON = (By.CSS_SELECTOR, "p[id='linkResponse'] > b:nth-child(2)")
+    # локаторы Дениса
+    ALL_LINKS = [(By.CSS_SELECTOR, "a[id='created']"),
+                 (By.CSS_SELECTOR, "a[id='no-content']"),
+                 (By.CSS_SELECTOR, "a[id='moved']"),
+                 (By.CSS_SELECTOR, "a[id='bad-request']"),
+                 (By.CSS_SELECTOR, "a[id='unauthorized']"),
+                 (By.CSS_SELECTOR, "a[id='forbidden']"),
+                 (By.CSS_SELECTOR, "a[id='invalid-url']"),
+                 ]
+    TEXT_AFTER_CLICK = (By.CSS_SELECTOR, "p[id='linkResponse']")
 
 class UploadPageLocators:
+
     UPLOAD_FILE = (By.CSS_SELECTOR, "input[id='uploadFile']")
     UPLOADED_FILE = (By.CSS_SELECTOR, "p[id='uploadedFilePath']")
 
 
 class DownLoadPageLocators:
+
     DOWNLOAD_FILE = (By.CSS_SELECTOR, "a[id='downloadButton']")
 
 
 class DynamicPropertiesPageLocators:
+
     COLOR_CHANGE_BUTTON = (By.CSS_SELECTOR, "button[id='colorChange']")
     ENABLE_AFTER_FIVE_SECOND = (By.CSS_SELECTOR, "button[id='enableAfter']")
     VISIBLE_AFTER_FIVE_SECOND = (By.CSS_SELECTOR, "button[id='visibleAfter']")
